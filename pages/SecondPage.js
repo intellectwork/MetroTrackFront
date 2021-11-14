@@ -22,6 +22,8 @@ const SecondPage = ({ route }) => {
   const [trackconf, setTrackconf] = React.useState(null);
   const [data, setData] = React.useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [activeLoad, setActiveLoad] = useState(" ");
+
   
   const { paramKey } = route.params;
   const { paramTime } = route.params;
@@ -29,15 +31,33 @@ const SecondPage = ({ route }) => {
   let tracks = [];
 
   useEffect(() => {
-    getLocationAsync()
+    getLocationAsync();
+    hasActiveLoad();
   }, []);
 
   const postVechileLocation = async () => {
 
     try {
-      let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
-      let res = await axios.post('https://metro-track-api-pr5xt.ondigitalocean.app/api/tracker', vechilLoc);
-      let data = res.data;
+      await axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trip',{ params: { vechileId: route.params.paramKey } }).then(response => 
+       {
+         console.log("Response data length--- " + response.data.length);
+     
+         if (response.data.length>0)
+          {   
+           console.log("Movida >0 ");
+           let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
+           axios.put('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker/'+route.params.paramKey, vechilLoc);
+          }
+          
+          else
+
+          {
+            console.log("Movida ==0 ");
+            let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
+            axios.post('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker', vechilLoc);
+          }
+       });  
+     
     }
     catch (e) {
       console.error('Failure!');
@@ -47,6 +67,27 @@ const SecondPage = ({ route }) => {
 
 
   }
+
+  const hasActiveLoad = async () => {
+
+    try {
+      axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trip',{ params: { vechileId: route.params.paramKey } }).then(response => 
+       {
+         //console.log("Response data is--- " + response.data);
+         setActiveLoad(response.data);
+       });  
+
+     
+     
+    }
+    catch (e) {
+      console.error('Failure!');
+      console.error(e.response.status);
+      throw new Error(e);
+    }
+  };
+
+
 
 
   const getLocationAsync = async () => {
@@ -60,13 +101,15 @@ const SecondPage = ({ route }) => {
     setLatitude(loc.coords.latitude);
     setLongitude(loc.coords.longitude);
 
-
     let geocode = await Location.reverseGeocodeAsync(loc.coords);
 
     setGeocode(geocode);
 
-
     postVechileLocation();
+
+    hasActiveLoad();
+    
+    this.forceUpdate();
 
   };
 
@@ -89,25 +132,63 @@ const SecondPage = ({ route }) => {
 
 
 
-
   return (
+   
+   
 
-    <SafeAreaView style={{ flex: 1 }}>
+   <SafeAreaView style={{ flex: 1 }}>
+     {
+       activeLoad==="Loaded" &&
       <View style={styles.container}>
         <Text style={styles.heading}>
-          {geocode[0].city} {geocode[0].isoCountryCode} {geocode[0].street} {latitude} {longitude}
+          {geocode[0].country} {"\n"}
+          {geocode[0].region} {"\n"}
+          {geocode[0].subregion}  {"\n"}
+          {geocode[0].city} {"\n"}
+          {geocode[0].district}  {"\n"}
+          {geocode[0].street} {"\n"}
+          {geocode[0].postalCode}  {"\n"}
+          {geocode[0].timezone} {"\n"} 
+          {geocode[0].isoCountryCode} {"\n"}
+          {latitude} {"\n"}
+          {longitude}
         </Text>
         <Text style={styles.textStyle}>
-          This is a location of : { paramKey }
+          This is a location of : { paramKey }  {"\n"}   
+          Active load is : { activeLoad } {"\n"}
+          Interval is: { route.params.paramTime } {"\n"}
         </Text>
       </View>
+     
+    }
+     
+    
+      <BackgroundTask interval={route.params.paramTime} function={() => { getLocationAsync() }}></BackgroundTask>
+     
+      {
+       activeLoad!="Loaded" && activeLoad!="Arrived" &&
+      <Text style={{ textAlign: 'center', backgroundColor: 'grey', color: 'Red', fontSize:30, paddingTop:90 }}>
+        You Have No Active Loads {"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}
+      </Text>
+      }  
+
+
+    {
+       activeLoad==="Arrived" &&
+       <Text style={{ textAlign: 'center', backgroundColor: 'grey', color: 'blue', fontSize:30, paddingTop:90 }}>
+       Vechile Delivered !!! Thank You !!! {"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}
+       </Text>
+     
+    }
+
+
+
+     
       <Text style={{ textAlign: 'center', backgroundColor: 'grey', color: 'lime' }}>
         MetroTransLogistics
       </Text>
-
-      <BackgroundTask interval={route.params.paramTime} function={() => { getLocationAsync() }}></BackgroundTask>
-    </SafeAreaView>
-
+   
+    </SafeAreaView> 
   );
 };
 

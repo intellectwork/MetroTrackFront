@@ -15,7 +15,7 @@ const FirstPage = ({navigation}) => {
   useEffect(() => {
 
     try {
-      axios.get('https://metro-track-api-pr5xt.ondigitalocean.app/api/trackerconf').then(function (response) { setTracktime(response.data[0].tracktime)})
+      axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trackerconf').then(function (response) { setTracktime(response.data[0].tracktime)})
     }
     catch (e) {
       console.error('Failure!');

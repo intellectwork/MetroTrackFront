@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "vsora",
-    "slug": "vsora",
+    "name": "MetroTracker",
+    "slug": "MetroTracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.ikakhi.vsora"
+      "package": "com.metro.tracker"
     },
     "web": {
       "favicon": "./assets/favicon.png"
