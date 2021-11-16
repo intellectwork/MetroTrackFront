@@ -40,11 +40,9 @@ const SecondPage = ({ route }) => {
     try {
       await axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trip',{ params: { vechileId: route.params.paramKey } }).then(response => 
        {
-         console.log("Response data length--- " + response.data.length);
-     
+        
          if (response.data.length>0)
           {   
-           console.log("Movida >0 ");
            let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
            axios.put('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker/'+route.params.paramKey, vechilLoc);
           }
@@ -52,7 +50,6 @@ const SecondPage = ({ route }) => {
           else
 
           {
-            console.log("Movida ==0 ");
             let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
             axios.post('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker', vechilLoc);
           }
