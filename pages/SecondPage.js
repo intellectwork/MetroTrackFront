@@ -38,7 +38,7 @@ const SecondPage = ({ route }) => {
   const postVechileLocation = async () => {
 
     try {
-      await axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trip',{ params: { vechileId: route.params.paramKey } }).then(response => 
+      await axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker',{ params: { vechileId: route.params.paramKey } }).then(response => 
        {
         
          if (response.data.length>0)
