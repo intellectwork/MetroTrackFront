@@ -21,7 +21,7 @@
       "bundleIdentifier": "com.metro.tracker.app",
       "buildNumber": "1.0.1",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Allow Expo experiences to use your location.",
+        "NSLocationWhenInUseUsageDescription": "Allow application to use your location.",
         "NSLocationAlwaysUsageDescription ": "Location is required for better shipment."
       }
     },
