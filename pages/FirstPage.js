@@ -6,16 +6,16 @@ import React, { useState, useEffect } from 'react';
 import {  SafeAreaView,  StyleSheet,  View,  Text,  TextInput,  Button } from 'react-native';
 import axios from 'axios';
 
-const FirstPage = ({navigation}) => {
+  const FirstPage = ({navigation}) => {
   const [userName, setUserName] = useState('');
   const [tracktime, setTracktime] = React.useState(null);
-
+  const trackerConfApiUrl = "https://nodejsclusters-57784-0.cloudclusters.net/api/trackerconf";
   
 
   useEffect(() => {
 
     try {
-      axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trackerconf').then(function (response) { setTracktime(response.data[0].tracktime)})
+      axios.get(trackerConfApiUrl).then(function (response) { setTracktime(response.data[0].tracktime)})
     }
     catch (e) {
       console.error('Failure!');

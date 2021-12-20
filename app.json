@@ -2,9 +2,9 @@
   "expo": {
     "name": "MetroTracker",
     "slug": "MetroTracker",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/metro.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,7 +17,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.metro.tracker.app",
+      "buildNumber": "1.0.1",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow Expo experiences to use your location.",
+        "NSLocationAlwaysUsageDescription ": "Location is required for better shipment."
+      }
     },
     "android": {
       "adaptiveIcon": {

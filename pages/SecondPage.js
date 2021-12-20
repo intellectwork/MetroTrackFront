@@ -23,7 +23,8 @@ const SecondPage = ({ route }) => {
   const [data, setData] = React.useState([]);
   const [isLoading, setLoading] = useState(true);
   const [activeLoad, setActiveLoad] = useState(" ");
-
+  const trackerApiUrl = "https://nodejsclusters-57784-0.cloudclusters.net/api/tracker/";
+  const tripApiUrl = "https://nodejsclusters-57784-0.cloudclusters.net/api/trip";
   
   const { paramKey } = route.params;
   const { paramTime } = route.params;
@@ -38,20 +39,20 @@ const SecondPage = ({ route }) => {
   const postVechileLocation = async () => {
 
     try {
-      await axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker',{ params: { vechileId: route.params.paramKey } }).then(response => 
+      await axios.get(trackerApiUrl,{ params: { vechileId: route.params.paramKey } }).then(response => 
        {
         
          if (response.data.length>0)
           {   
            let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
-           axios.put('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker/'+route.params.paramKey, vechilLoc);
+           axios.put(trackerApiUrl+route.params.paramKey, vechilLoc);
           }
           
           else
 
           {
             let vechilLoc = { vechileId: route.params.paramKey, latitude: latitude, longitude: longitude, published: "true" };
-            axios.post('https://nodejsclusters-57784-0.cloudclusters.net/api/tracker', vechilLoc);
+            axios.post(trackerApiUrl, vechilLoc);
           }
        });  
      
@@ -68,7 +69,7 @@ const SecondPage = ({ route }) => {
   const hasActiveLoad = async () => {
 
     try {
-      axios.get('https://nodejsclusters-57784-0.cloudclusters.net/api/trip',{ params: { vechileId: route.params.paramKey } }).then(response => 
+      axios.get(tripApiUrl,{ params: { vechileId: route.params.paramKey } }).then(response => 
        {
          //console.log("Response data is--- " + response.data);
          setActiveLoad(response.data);
@@ -84,11 +85,14 @@ const SecondPage = ({ route }) => {
     }
   };
 
-
+  function refreshPage() {
+    window.location.reload();
+  }
 
 
   const getLocationAsync = async () => {
 
+   
     let { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== 'granted') { setErrorMessage('Permission to access location was denied') };
@@ -106,7 +110,6 @@ const SecondPage = ({ route }) => {
 
     hasActiveLoad();
     
-    this.forceUpdate();
 
   };
 
@@ -119,7 +122,7 @@ const SecondPage = ({ route }) => {
           onMessage={props.function}
           source={{
             html: `<script>
-                setInterval(()=>{window.ReactNativeWebView.postMessage("");}, ${props.interval})
+                setInterval(()=>{window.ReactNativeWebView.postMessage("");window.location.reload();}, ${props.interval})
                 </script>`,
           }}
         />
@@ -164,7 +167,7 @@ const SecondPage = ({ route }) => {
      
       {
        activeLoad!="Loaded" && activeLoad!="Arrived" &&
-      <Text style={{ textAlign: 'center', backgroundColor: 'grey', color: 'Red', fontSize:30, paddingTop:90 }}>
+      <Text style={{ textAlign: 'center', backgroundColor: 'grey', color: 'red', fontSize:30, paddingTop:90 }}>
         You Have No Active Loads {"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}
       </Text>
       }  
